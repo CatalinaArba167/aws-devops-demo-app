@@ -24,7 +24,7 @@ jobs:
       - run: npm run build
         working-directory: ui
       - run: cp -r ./ui/build/. ./src/main/resources/static/.
-      - run: mvn "-DfinalName=online-shop-v0.0.1" clean package
+      - run: mvn -q "-DfinalName=online-shop-v0.0.1" clean package
       - uses: "ncipollo/release-action@v1"
         with:
           # $GITHUB_REF_NAME

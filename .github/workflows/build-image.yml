@@ -44,9 +44,8 @@ jobs:
     - uses: actions/checkout@v3 
     - name: Get commit hash
       id: get-commit-hash
-      run: echo "::set-output name=commit-hash::$(git rev-parse --short HEAD)"
-
-    - uses: actions/checkout@v3      
+      run: echo "::set-output name=commit-hash::$(git rev-parse HEAD)"
+     
     - name: Build Docker image
       run: docker build -t terraform_ecr_repo:${{ steps.get-commit-hash.outputs.commit-hash }}  .
       

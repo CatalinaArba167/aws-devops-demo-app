@@ -40,15 +40,12 @@ jobs:
 
     - name: Login to Amazon ECR
       run: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 767397826387.dkr.ecr.us-east-1.amazonaws.com
-      
-    - name: Get commit hash
-      run: echo "COMMIT_HASH=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-    
+          
     - name: Build Docker image
-      run: docker build -t terraform_ecr_repo:$COMMIT_HASH .
+      run: docker build -t terraform_ecr_repo .
       
     - name: Tag the Docker image
-      run: docker tag terraform_ecr_repo:$COMMIT_HASH 767397826387.dkr.ecr.us-east-1.amazonaws.com/terraform_ecr_repo:$COMMIT_HASH
+      run: docker tag terraform_ecr_repo:latest 767397826387.dkr.ecr.us-east-1.amazonaws.com/terraform_ecr_repo:latest
       
     - name: Push the image to Amazon ECR
-      run: docker push 767397826387.dkr.ecr.us-east-1.amazonaws.com/terraform_ecr_repo:$COMMIT_HASH
+      run: docker push 767397826387.dkr.ecr.us-east-1.amazonaws.com/terraform_ecr_repo:latest

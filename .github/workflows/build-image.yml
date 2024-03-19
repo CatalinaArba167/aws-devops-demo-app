@@ -14,12 +14,26 @@ on:
   pull_request:
     branches: [ "master" ]
 
+permissions:
+  id-token: write
+  contents: read
+
+
+
 jobs:
   build:
 
     runs-on: ubuntu-latest
 
     steps:
+    
+    - name: Configure AWS Credentials region audience
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        audience: sts.amazonaws.com
+        aws-region: us-east-1
+        role-to-assume: arn:aws:iam::767397826387:role/ECR_push_role
+
     - uses: actions/checkout@v3
     - name: Build Docker image
       run: docker build -t my-first-docker-image:${{ github.run_number }} .

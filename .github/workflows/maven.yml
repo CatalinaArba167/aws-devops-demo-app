@@ -30,4 +30,4 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
     - name: Build Docker image
-      run: docker build -t myFirstDockerImage:${{ github.run_number }} .
+      run: docker build -t my-first-docker-image:${{ github.run_number }} .

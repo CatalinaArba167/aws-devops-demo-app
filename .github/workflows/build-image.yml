@@ -41,6 +41,7 @@ jobs:
     - name: Login to Amazon ECR
       run: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 767397826387.dkr.ecr.us-east-1.amazonaws.com
           
+    - uses: actions/checkout@v3      
     - name: Build Docker image
       run: docker build -t terraform_ecr_repo .
       

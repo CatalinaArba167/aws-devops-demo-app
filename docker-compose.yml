@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  backend:
+    build: .
+    ports:
+      - "8081:8080"
+    environment:
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
+
+      - SPRING_REDIS_HOST=cache
+      - SPRING_REDIS_PORT=6379
+      - SPRING_SESSION_STORETYPE=redis
+      - SPRING_SESSION_REDIS_CONFIGUREACTION=none
+      - WAIT_HOSTS= db:5432, cache:6379
+  
+    depends_on:
+      - db
+      - cache
+
+  db:
+    image: postgres:16.2-alpine3.19
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  cache:
+    image: redis:7.2.4-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  postgres_data:
+  redis_data:
+

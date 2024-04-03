@@ -78,7 +78,7 @@ resource "aws_ecs_service" "terraform_ecs_service" {
 
    network_configuration {
     subnets = [aws_subnet.private_subnet_1.id,aws_subnet.private_subnet_2.id,aws_subnet.public_subnet_1.id, aws_subnet.public_subnet_2.id]
-    security_groups = [ aws_security_group.terraform_online_shop_backend_security_group.id]
+    # security_groups = [ aws_security_group.terraform_online_shop_backend_security_group.id]
    }
    
    capacity_provider_strategy {

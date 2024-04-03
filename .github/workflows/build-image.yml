@@ -15,7 +15,7 @@ on:
     branches: [ "master" ]
 
 env:
-  DOCKER_IMAGE_TAG=${{github.sha}}
+  DOCKER_IMAGE_TAG: ${{github.sha}}
 
 permissions:
   id-token: write

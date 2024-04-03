@@ -19,11 +19,6 @@ variable "application_version" {
   default     = "v0.0.1"
 }
 
-variable "my_ip" {
-  description = "The IP of my computer"
-  default     = "147.161.131.112/32"
-}
-
 data "http" "myIp" {
   url = "http://icanhazip.com/"
 }

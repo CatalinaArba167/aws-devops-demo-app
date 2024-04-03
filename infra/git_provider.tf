@@ -45,16 +45,7 @@ resource "aws_iam_role_policy" "admin_policy" {
         "*"
       ],
       "Resource" : "*"
-    },
-    {
-      "Effect" : "Allow",
-      "Action" : "ecr:GetAuthorizationToken",
-      "Resource" : "*"
     }
   ]
 })
 }
-# resource "aws_iam_role_policy_attachment" "admin_access" {
-#   role       = aws_iam_role.online_shop_ci_cd_pipeline.name
-#   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
-# }

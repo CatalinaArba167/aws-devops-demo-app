@@ -1,27 +1,27 @@
 resource "aws_iam_policy" "ECR_push_policy" {
   name        = "ECR_push_policy"
   description = "Policy that allows pushing images to ECR"
-  policy      = jsonencode({
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "ecr:CompleteLayerUpload",
-                "ecr:GetAuthorizationToken",
-                "ecr:UploadLayerPart",
-                "ecr:InitiateLayerUpload",
-                "ecr:BatchCheckLayerAvailability",
-                "ecr:PutImage"
-            ],
-            "Resource": [
-                  "*"
-               #"arn:aws:ecr:us-east-1:767397826387:repository/terraform_ecr_repo"
-            ]
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "ecr:CompleteLayerUpload",
+          "ecr:GetAuthorizationToken",
+          "ecr:UploadLayerPart",
+          "ecr:InitiateLayerUpload",
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:PutImage"
+        ],
+        "Resource" : [
+          "*"
+          #"arn:aws:ecr:us-east-1:767397826387:repository/terraform_ecr_repo"
+        ]
 
-        }
+      }
     ]
-})
+  })
 }
 
 resource "aws_iam_role" "ECR_push_role" {

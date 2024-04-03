@@ -1,11 +1,3 @@
-# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
-
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
 name: Build the docker image
 
 on:
@@ -39,14 +31,7 @@ jobs:
         audience: sts.amazonaws.com
         aws-region: us-east-1
         role-to-assume: arn:aws:iam::767397826387:role/online_shop_ci_cd_pipeline
-
-    # - uses: actions/checkout@v3
-    # - name: Build Docker image
-    #   run: docker build -t my-first-docker-image:${{ github.run_number }} .
-
-
-
-   
+ 
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
       with:
@@ -62,12 +47,7 @@ jobs:
 
     - name: Login to Amazon ECR
       run: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 767397826387.dkr.ecr.us-east-1.amazonaws.com
-          
-    # - uses: actions/checkout@v3 
-    # - name: Get commit hash
-    #   id: get-commit-hash
-    #   run: echo "::set-output name=commit-hash::$(git rev-parse HEAD)"
-     
+           
     - name: Build Docker image
       run: docker build -t terraform_ecr_repo:$DOCKER_IMAGE_TAG  .
       

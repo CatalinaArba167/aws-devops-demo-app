@@ -1,18 +1,18 @@
 resource "aws_iam_policy" "EC2_pull_policy" {
   name        = "EC2_pull_policy"
   description = "Policy that allows pulling images from ECR"
-  policy      = jsonencode({
-    "Version": "2012-10-17",
-    "Statement": [
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
       {
-        "Effect": "Allow",
-        "Action": [
+        "Effect" : "Allow",
+        "Action" : [
           "ecr:GetDownloadUrlForLayer",
           "ecr:BatchGetImage",
           "ecr:GetAuthorizationToken"
         ],
-        "Resource": [
-            "*"
+        "Resource" : [
+          "*"
           #  "arn:aws:ecr:us-east-1:767397826387:repository/terraform_ecr_repo"
         ]
 

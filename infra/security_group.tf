@@ -4,7 +4,7 @@ resource "aws_security_group" "terraform_online_shop_backend_security_group" {
   vpc_id      = aws_vpc.terraform_vpc.id
 
 
-   # SSH access from your IP
+  # SSH access from your IP
   ingress {
     from_port   = 22
     to_port     = 22

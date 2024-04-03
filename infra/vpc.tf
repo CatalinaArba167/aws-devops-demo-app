@@ -1,7 +1,7 @@
 resource "aws_vpc" "terraform_vpc" {
   cidr_block = "10.0.0.0/16"
 
- lifecycle {
+  lifecycle {
     #prevent_destroy=true
   }
   tags = {
@@ -13,7 +13,7 @@ resource "aws_subnet" "public_subnet_1" {
   vpc_id                  = aws_vpc.terraform_vpc.id
   cidr_block              = "10.0.1.0/24"
   availability_zone       = "us-east-1a"
-  map_public_ip_on_launch = true  # This attribute makes the subnet public
+  map_public_ip_on_launch = true # This attribute makes the subnet public
 
   tags = {
     Name = "Public Subnet 1"
@@ -24,7 +24,7 @@ resource "aws_subnet" "public_subnet_2" {
   vpc_id                  = aws_vpc.terraform_vpc.id
   cidr_block              = "10.0.2.0/24"
   availability_zone       = "us-east-1b"
-  map_public_ip_on_launch = true  # This attribute makes the subnet public
+  map_public_ip_on_launch = true # This attribute makes the subnet public
 
   tags = {
     Name = "Public Subnet 2"
@@ -35,7 +35,7 @@ resource "aws_subnet" "private_subnet_1" {
   vpc_id                  = aws_vpc.terraform_vpc.id
   cidr_block              = "10.0.3.0/24"
   availability_zone       = "us-east-1a"
-  map_public_ip_on_launch = false  # This attribute makes the subnet private
+  map_public_ip_on_launch = false # This attribute makes the subnet private
 
   tags = {
     Name = "Private Subnet 1"
@@ -46,7 +46,7 @@ resource "aws_subnet" "private_subnet_2" {
   vpc_id                  = aws_vpc.terraform_vpc.id
   cidr_block              = "10.0.4.0/24"
   availability_zone       = "us-east-1b"
-  map_public_ip_on_launch = false  # This attribute makes the subnet private
+  map_public_ip_on_launch = false # This attribute makes the subnet private
 
   tags = {
     Name = "Private Subnet 2"

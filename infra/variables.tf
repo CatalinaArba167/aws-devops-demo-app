@@ -30,13 +30,13 @@ variable "docker_image_tag" {
 }
 
 variable "ssh-key-pair" {
-  type = string
+  type    = string
   default = "online-shop-ssh-key-pair"
 }
 
 locals {
   ecs_cluster_name = aws_ecs_cluster.terraform_ecs_cluster.name
-  rds_endpoint  = "jdbc:postgresql://${aws_db_instance.OnlineShopDatabase.endpoint}/postgres"
-  radis_endpoint = aws_elasticache_cluster.terraform_online_shop_cache_cluster.cache_nodes[0].address
-  jar_url = "https://github.com/msg-CareerPaths/aws-devops-demo-app/releases/download/${var.application_version}/online-shop-${var.application_version}.jar"
+  rds_endpoint     = "jdbc:postgresql://${aws_db_instance.OnlineShopDatabase.endpoint}/postgres"
+  radis_endpoint   = aws_elasticache_cluster.terraform_online_shop_cache_cluster.cache_nodes[0].address
+  jar_url          = "https://github.com/msg-CareerPaths/aws-devops-demo-app/releases/download/${var.application_version}/online-shop-${var.application_version}.jar"
 }

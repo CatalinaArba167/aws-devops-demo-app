@@ -24,14 +24,14 @@ resource "aws_ecs_task_definition" "terraform-ecs-task" {
 
 
   container_definitions = jsonencode([{
-    name         = "my-first-container",
-    image        = "${aws_ecr_repository.terraform_ecr_repo.repository_url}:${var.docker_image_tag}",
-    essential    = true,
+    name      = "my-first-container",
+    image     = "${aws_ecr_repository.terraform_ecr_repo.repository_url}:${var.docker_image_tag}",
+    essential = true,
     portMappings = [{
       containerPort = 8080,
       hostPort      = 8080
     }],
-     logConfiguration = {
+    logConfiguration = {
       logDriver = "awslogs",
       options = {
         "awslogs-group"         = aws_cloudwatch_log_group.ecs_logs.name,
@@ -45,16 +45,16 @@ resource "aws_ecs_task_definition" "terraform-ecs-task" {
         valueFrom = "arn:aws:secretsmanager:us-east-1:767397826387:secret:MyFirstSecret:SPRING_DATASOURCE_PASSWORD::"
       }
     ]
-    environment  = [
+    environment = [
       { name = "SPRING_DATASOURCE_USERNAME", value = "postgres" },
       { name = "SPRING_DATASOURCE_URL", value = local.rds_endpoint },
-      { name = "SPRING_REDIS_HOST", value = local.radis_endpoint },  
+      { name = "SPRING_REDIS_HOST", value = local.radis_endpoint },
       { name = "SPRING_REDIS_PORT", value = "6379" },
       { name = "SPRING_SESSION_STORETYPE", value = "redis" },
       { name = "SPRING_SESSION_REDIS_CONFIGUREACTION", value = "none" }
     ],
-    cpu          = 256  
-    memory       = 512   
+    cpu    = 256
+    memory = 512
   }])
 }
 
@@ -63,28 +63,28 @@ resource "aws_ecs_task_definition" "terraform-ecs-task" {
 
 
 resource "aws_ecs_service" "terraform_ecs_service" {
-  name="terraform_ecs_service"
-  cluster = aws_ecs_cluster.terraform_ecs_cluster.id
-  task_definition = aws_ecs_task_definition.terraform-ecs-task.arn
-  desired_count = 1
+  name                 = "terraform_ecs_service"
+  cluster              = aws_ecs_cluster.terraform_ecs_cluster.id
+  task_definition      = aws_ecs_task_definition.terraform-ecs-task.arn
+  desired_count        = 1
   force_new_deployment = true
 
-  
+
   load_balancer {
     target_group_arn = aws_lb_target_group.terraform_target_group_for_ecs.arn
-    container_name = "my-first-container"
-    container_port = 8080
+    container_name   = "my-first-container"
+    container_port   = 8080
   }
 
-   network_configuration {
-    subnets = [aws_subnet.private_subnet_1.id,aws_subnet.private_subnet_2.id,aws_subnet.public_subnet_1.id, aws_subnet.public_subnet_2.id]
-    security_groups = [ aws_security_group.terraform_online_shop_backend_security_group.id]
-   }
-   
-   capacity_provider_strategy {
-     capacity_provider = aws_ecs_capacity_provider.ecs_capacity_provider.name
-     weight = 100
-   }
+  network_configuration {
+    subnets         = [aws_subnet.private_subnet_1.id, aws_subnet.private_subnet_2.id, aws_subnet.public_subnet_1.id, aws_subnet.public_subnet_2.id]
+    security_groups = [aws_security_group.terraform_online_shop_backend_security_group.id]
+  }
+
+  capacity_provider_strategy {
+    capacity_provider = aws_ecs_capacity_provider.ecs_capacity_provider.name
+    weight            = 100
+  }
 }
 
 

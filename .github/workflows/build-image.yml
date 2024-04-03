@@ -47,11 +47,11 @@ jobs:
         terraform_version: 1.3.0
     
     - name: Terraform Init
-      working-directory : ./infra
+      working-directory : infra
       run: terraform init
 
     - name: Terraform Apply
-      working-directory : ./infra
+      working-directory : infra
       run: terraform apply -auto-approve -var docker_image_tag=$DOCKER_IMAGE_TAG
 
     - name: Login to Amazon ECR

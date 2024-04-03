@@ -29,6 +29,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+    - name: clone git repo
+      uses: actions/checkout@v3 
     
     - name: Configure AWS Credentials region audience
       uses: aws-actions/configure-aws-credentials@v4
@@ -41,6 +44,9 @@ jobs:
     # - name: Build Docker image
     #   run: docker build -t my-first-docker-image:${{ github.run_number }} .
 
+
+
+   
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
       with:

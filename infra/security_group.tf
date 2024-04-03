@@ -9,7 +9,7 @@ resource "aws_security_group" "terraform_online_shop_backend_security_group" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = [var.my_ip] 
+    cidr_blocks = ["${chomp(data.http.myIp.response_body)}/32"]
     description = "Allows SSH traffic from your IP"
   }
 

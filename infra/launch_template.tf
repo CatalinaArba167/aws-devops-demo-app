@@ -15,21 +15,12 @@
 #   associate_public_ip_address = true
 # }
 
-resource "aws_key_pair" "terraform-ssh-key" {
-  key_name   = var.ssh_key_name
-  public_key = ""
-
-  lifecycle {
-    #prevent_destroy = true
-    
-  }
-}
 
 
 resource "aws_launch_template" "terraform_launch_template" {
   name = "TerraformLaunchTemplate"
   image_id        = "ami-07761f3ae34c4478d" 
-  key_name        = aws_key_pair.terraform-ssh-key.key_name
+  key_name        = var.ssh-key-pair
   instance_type   = var.ec2_instance_type
 
   iam_instance_profile {
@@ -54,7 +45,7 @@ data "aws_ssm_parameter" "ecs_optimized_ami" {
 resource "aws_launch_template" "terraform_launch_template_for_ecs" {
   name            = "TerraformLaunchTemplateForECS"
   image_id        = data.aws_ssm_parameter.ecs_optimized_ami.value
-  key_name        = aws_key_pair.terraform-ssh-key.key_name
+  key_name        = var.ssh-key-pair
   instance_type   = var.ec2_instance_type
 
   iam_instance_profile {

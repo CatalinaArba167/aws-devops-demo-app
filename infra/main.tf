@@ -5,6 +5,11 @@ terraform {
       version = "5.39.1"
     }
   }
+  backend "s3" {
+    bucket = "online-shop-backend"
+    key="online-shop-backend.tfstate"
+    region = "us-east-1"
+  }
 
   required_version = ">= 1.2.0"
 }

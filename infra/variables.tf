@@ -1,8 +1,3 @@
-variable "ssh_key_name" {
-  description = "The name of the SSH key pair"
-  default     = "terraform-ssh-key"
-}
-
 variable "ec2_instance_type" {
   description = "EC2 instance type"
   default     = "t2.micro"
@@ -37,6 +32,11 @@ variable "docker_image_tag" {
   description = "Docker image tag to pull from ECR and run on EC2 instances"
   default     = "4c8c8cb4fd631656cf072723d7da5d7e0a4de73f"
   type        = string
+}
+
+variable "ssh-key-pair" {
+  type = string
+  default = "online-shop-ssh-key-pair"
 }
 
 locals {

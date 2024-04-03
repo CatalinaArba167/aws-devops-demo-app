@@ -27,7 +27,7 @@ resource "aws_launch_template" "terraform_launch_template" {
     name = aws_iam_instance_profile.ec2_ecr_role_profile.name
   }
 
-  user_data       =  base64encode(templatefile("/userdata_ECR.tftpl",{
+  user_data       =  base64encode(templatefile("./userdata_ECR.tftpl",{
     # rds_endpoint  = local.rds_endpoint,
     # radis_endpoint= local.radis_endpoint,
     # jar_url       =  local.jar_url
@@ -52,7 +52,7 @@ resource "aws_launch_template" "terraform_launch_template_for_ecs" {
     name = aws_iam_instance_profile.ec2_container_service_for_ec2_role_profile.name
   }
 
-  user_data       =  base64encode(templatefile("/userdata_ECS.tftpl",{
+  user_data       =  base64encode(templatefile("./userdata_ECS.tftpl",{
     terraform_ecs_cluster_name = local.ecs_cluster_name
   }))
 

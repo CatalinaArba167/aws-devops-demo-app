@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Update the installed packages and package cache
+sudo yum update -y
+
+# Install Docker
+sudo yum install docker -y || { echo "Failed to install Docker"; exit 1; }
+
+cat <<EOF > ./.env
+SPRING_DATASOURCE_USERNAME=postgres
+SPRING_DATASOURCE_PASSWORD=postgres
+SPRING_DATASOURCE_URL=jdbc:postgresql://online-shop-database.cpcaaooq2hbg.us-east-1.rds.amazonaws.com:5432/postgres
+SPRING_SESSION_STORETYPE=redis
+SPRING_REDIS_HOST=terraform-online-shop-cache-cluster.7oixk7.0001.use1.cache.amazonaws.com
+SPRING_REDIS_PORT=6379
+SPRING_SESSION_REDIS_CONFIGUREACTION=none
+EOF
+
+#Start the Docker service
+sudo service docker start || { echo "Failed to start Docker"; exit 1; }
+
+#Add the ec2-user to the docker group so you can execute Docker commands without using sudo.
+sudo usermod -a -G docker ec2-user || { echo "Failed to add ec2-user to the docker group"; exit 1; }
+
+#Login to ECR via the AWS CLI.
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 767397826387.dkr.ecr.us-east-1.amazonaws.com || { echo "Failed to login to ECR via the AWS CLI"; exit 1; }
+
+# Run Docker container from the ECR image
+sudo docker run  --env-file .env --network host --detach \767397826387.dkr.ecr.us-east-1.amazonaws.com/terraform_ecr_repo:${tag} || { echo "\n Failed to run Docker container"; exit 1; }

@@ -1,0 +1,58 @@
+#!/bin/bash
+
+# Install Java 11
+sudo yum install java-11-amazon-corretto -y || { echo "Java installation failed"; exit 1; }
+
+# Create the directory for the application
+sudo mkdir -p /opt/online-shop || { echo "Failed to create directory"; exit 1; }
+
+# Download the JAR file
+curl -O -L ${jar_url} || { echo "Failed to download JAR file"; exit 1; }
+
+# Move the downloaded JAR file to the application directory
+sudo mv online-shop-v0.0.1.jar /opt/online-shop/ || { echo "Failed to move JAR file"; exit 1; }
+
+# Create a group for application management
+sudo groupadd -r appmgr || { echo "Failed to create group"; exit 1; }
+
+# Create a user for application management
+sudo useradd -r -s /bin/false -g appmgr jvmapps || { echo "Failed to create user"; exit 1; }
+
+# Create a script to generate the service file content
+cat <<EOF > /etc/systemd/system/online-shop-demo-app.service
+[Unit]
+Description=Online Shop Demo App Service
+
+[Service]
+WorkingDirectory=/opt/online-shop
+ExecStart=/bin/java -Xms128m -Xmx256m -jar online-shop-v0.0.1.jar
+User=jvmapps
+Type=simple
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Modify the service file with additional configurations
+cat <<EOF >> /etc/systemd/system/online-shop-demo-app.service
+[Service]
+# Database Configuration
+Environment="SPRING_DATASOURCE_USERNAME=postgres"
+Environment="SPRING_DATASOURCE_PASSWORD=postgres"
+Environment="SPRING_DATASOURCE_URL=${rds_endpoint}"
+
+# Redis Configuration
+Environment="SPRING_REDIS_HOST=${radis_endpoint}"
+Environment="SPRING_REDIS_PORT=6379"
+Environment="SPRING_SESSION_STORETYPE=redis"
+Environment="SPRING_SESSION_REDIS_CONFIGUREACTION=none"
+EOF
+
+# Set ownership
+sudo chown -R jvmapps:appmgr /opt/online-shop || { echo "Failed to set ownership"; exit 1; }
+
+# Reload systemd and start the service
+sudo systemctl daemon-reload || { echo "Failed to reload systemd"; exit 1; }
+sudo systemctl start online-shop-demo-app.service || { echo "Failed to start service"; exit 1; }

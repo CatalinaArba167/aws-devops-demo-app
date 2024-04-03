@@ -25,7 +25,7 @@ resource "aws_iam_role" "online_shop_ci_cd_pipeline" {
             "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
           },
           "StringLike" : {
-            "token.actions.githubusercontent.com:sub" : ["repo:CatalinaArba167/aws-devops-demo-app/*"]
+            "token.actions.githubusercontent.com:sub" : ["repo:CatalinaArba167/aws-devops-demo-app*"]
           }
         }
       }

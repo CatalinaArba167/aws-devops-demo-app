@@ -8,7 +8,8 @@ on:
 
 env:
   DOCKER_IMAGE_TAG: ${{github.sha}}
-
+  FRONTEND_BUCKET_NAME: "my-first-s3-bucket-for-online-shop-frontend-catalina"
+  DISTRIBUTION_ID: "E10TJO10N79KP1"
 permissions:
   id-token: write
   contents: read
@@ -68,14 +69,14 @@ jobs:
         working-directory: ui
             
       - name: Deploy frontend to S3
-        run: aws s3 sync build s3://my-first-s3-bucket-for-online-shop-frontend-catalina
+        run: aws s3 sync build s3://$FRONTEND_BUCKET_NAME
         working-directory: ui
           
             
       - name: Invalidate CloudFront Distribution
         run: |
           aws cloudfront create-invalidation \
-          --distribution-id E10TJO10N79KP1 \
+          --distribution-id $DISTRIBUTION_ID \
           --paths "/*"
           
 

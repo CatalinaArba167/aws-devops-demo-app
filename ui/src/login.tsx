@@ -17,7 +17,7 @@ export const Login: React.FC<LoginProps> = () => {
 
     return (
         <form onSubmit={onLogin}>
-            <h1 className="title">Login</h1>
+            <h1 className="title">Loginnnnnnnnn</h1>
             <div className="box">
                 <div className="field">
                     <p className="control has-icons-left has-icons-right">

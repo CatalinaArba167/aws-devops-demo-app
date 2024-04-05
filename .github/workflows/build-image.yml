@@ -59,23 +59,23 @@ jobs:
       - name: Push the image to Amazon ECR
         run: docker push 767397826387.dkr.ecr.us-east-1.amazonaws.com/terraform_ecr_repo:$DOCKER_IMAGE_TAG
 
-    - name: Install Dependencies
+      - name: Install Dependencies
         run: npm install
         working-directory: ui
-          
+            
       - name: Build Frontend Project
         run: npm run build
         working-directory: ui
-          
+            
       - name: Deploy frontend to S3
         run: aws s3 sync build s3://my-first-s3-bucket-for-online-shop-frontend-catalina
         working-directory: ui
-        
           
+            
       - name: Invalidate CloudFront Distribution
         run: |
           aws cloudfront create-invalidation \
           --distribution-id E10TJO10N79KP1 \
           --paths "/*"
-        
+          
 

@@ -31,8 +31,8 @@ jobs:
 
       - name: Set up Node.js 
         uses: actions/setup-node@v3
-          with:
-            node-version: 16
+        with:
+          node-version: 16
   
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2

@@ -17,68 +17,65 @@ permissions:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
-
-    - name: clone git repo
-      uses: actions/checkout@v3 
-    
-    - name: Configure AWS Credentials region audience
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        audience: sts.amazonaws.com
-        aws-region: us-east-1
-        role-to-assume: arn:aws:iam::767397826387:role/online_shop_ci_cd_pipeline
-
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: 16
-
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v2
-      with:
-        terraform_version: 1.3.0
-    
-    - name: Terraform Init
-      working-directory : infra
-      run: terraform init
-
-    - name: Terraform Apply
-      working-directory : infra
-      run: terraform apply -auto-approve -var docker_image_tag=$DOCKER_IMAGE_TAG
-
-    - name: Login to Amazon ECR
-      run: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 767397826387.dkr.ecr.us-east-1.amazonaws.com
-           
-    - name: Build Docker image
-      run: docker build -t terraform_ecr_repo:$DOCKER_IMAGE_TAG  .
+      - name: clone git repo
+        uses: actions/checkout@v3 
       
-    - name: Tag the Docker image
-      run: docker tag terraform_ecr_repo:$DOCKER_IMAGE_TAG  767397826387.dkr.ecr.us-east-1.amazonaws.com/terraform_ecr_repo:$DOCKER_IMAGE_TAG
-      
-    - name: Push the image to Amazon ECR
-      run: docker push 767397826387.dkr.ecr.us-east-1.amazonaws.com/terraform_ecr_repo:$DOCKER_IMAGE_TAG
+      - name: Configure AWS Credentials region audience
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          audience: sts.amazonaws.com
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::767397826387:role/online_shop_ci_cd_pipeline
 
-   - name: Install Dependencies
-      run: npm install
-      working-directory: ui
+      - name: Set up Node.js 
+        uses: actions/setup-node@v3
+          with:
+            node-version: 16
+  
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.3.0
+      
+      - name: Terraform Init
+        working-directory : infra
+        run: terraform init
+
+      - name: Terraform Apply
+        working-directory : infra
+        run: terraform apply -auto-approve -var docker_image_tag=$DOCKER_IMAGE_TAG
+
+      - name: Login to Amazon ECR
+        run: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 767397826387.dkr.ecr.us-east-1.amazonaws.com
+            
+      - name: Build Docker image
+        run: docker build -t terraform_ecr_repo:$DOCKER_IMAGE_TAG  .
         
-    - name: Build Frontend Project
-      run: npm run build
-      working-directory: ui
+      - name: Tag the Docker image
+        run: docker tag terraform_ecr_repo:$DOCKER_IMAGE_TAG  767397826387.dkr.ecr.us-east-1.amazonaws.com/terraform_ecr_repo:$DOCKER_IMAGE_TAG
         
-    - name: Deploy frontend to S3
-      run: aws s3 sync build s3://my-first-s3-bucket-for-online-shop-frontend-catalina
-      working-directory: ui
-      
+      - name: Push the image to Amazon ECR
+        run: docker push 767397826387.dkr.ecr.us-east-1.amazonaws.com/terraform_ecr_repo:$DOCKER_IMAGE_TAG
+
+    - name: Install Dependencies
+        run: npm install
+        working-directory: ui
+          
+      - name: Build Frontend Project
+        run: npm run build
+        working-directory: ui
+          
+      - name: Deploy frontend to S3
+        run: aws s3 sync build s3://my-first-s3-bucket-for-online-shop-frontend-catalina
+        working-directory: ui
         
-    - name: Invalidate CloudFront Distribution
-      run: |
-        aws cloudfront create-invalidation \
-        --distribution-id E10TJO10N79KP1 \
-        --paths "/*"
-      
+          
+      - name: Invalidate CloudFront Distribution
+        run: |
+          aws cloudfront create-invalidation \
+          --distribution-id E10TJO10N79KP1 \
+          --paths "/*"
+        
 

@@ -34,6 +34,21 @@ variable "ssh-key-pair" {
   default = "online-shop-ssh-key-pair"
 }
 
+variable "frontend_s3_bucket_name" {
+  type = string
+  default = "my-first-s3-bucket-for-online-shop-frontend-catalina"
+  
+}
+
+variable "region" {
+  type = string
+  default = "us-east-1"
+  
+}
+locals {
+  s3_origin_id   = "${var.frontend_s3_bucket_name}-origin"
+}
+
 locals {
   ecs_cluster_name = aws_ecs_cluster.terraform_ecs_cluster.name
   rds_endpoint     = "jdbc:postgresql://${aws_db_instance.OnlineShopDatabase.endpoint}/postgres"
